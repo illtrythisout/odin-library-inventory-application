@@ -1,1 +1,1 @@
-# odin-library-inventory-application
+# Library Inventory Application
