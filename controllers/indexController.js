@@ -1,5 +1,16 @@
+const db = require('../db/queries');
+
 function indexGet(req, res) {
-  res.send('Hello World!');
+  res.render('index');
 }
 
-module.exports = { indexGet };
+function createBookGet(req, res) {
+  console.log(db.getAllAuthors());
+  res.render('createBook', {
+    title: 'Add Book',
+    authors: ['Bob', 'Dylan'],
+    genres: ['sci-fi', 'bio'],
+  });
+}
+
+module.exports = { indexGet, createBookGet };

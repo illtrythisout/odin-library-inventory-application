@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library<%= locals.title ? ` | ${locals.title}` : '' %></title>
+  </head>
+  <body>
+    <h1><%= locals.title || 'Library Inventory' %></h1>
+
+    <a href="./createBook">Add a book</a>
+
+    <% if (locals.books) { %>
+    <ul>
+      <% locals.books.forEach(book => { %>
+      <li><%= `Title: ${book.title}` %></li>
+      <% }) %>
+    </ul>
+    <%} else { %>
+    <p class="no-books">There are no books in the library</p>
+    <% } %>
+  </body>
+</html>
