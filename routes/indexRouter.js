@@ -10,4 +10,6 @@ router
   .get(indexController.createBookGet)
   .post(indexController.createBookPost);
 
+router.post('/delete/:id', indexController.deleteBookPost);
+
 module.exports = router;

@@ -22,6 +22,10 @@ exports.createBookGet = async (req, res) => {
 exports.createBookPost = async (req, res) => {
   const { title, author, pages, genre } = req.body;
   await db.insertFullBook({ title, author, pages, genre });
-  const fullBookCreated = await db.getFullBook(title);
+  res.redirect('/');
+};
+
+exports.deleteBookPost = async (req, res) => {
+  await db.deleteFullBook(req.params.id);
   res.redirect('/');
 };

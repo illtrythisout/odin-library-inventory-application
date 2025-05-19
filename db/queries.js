@@ -3,7 +3,7 @@ const pool = require('./pool');
 async function getAllFullBooks() {
   try {
     const query = `
-    SELECT books.title, authors.name AS author, genres.name AS genre, books.num_of_pages
+    SELECT books.id, books.title, authors.name AS author, genres.name AS genre, books.num_of_pages
     FROM books
     JOIN books_authors
     ON books.id = books_authors.book_id
@@ -24,7 +24,7 @@ async function getAllFullBooks() {
 async function getFullBook(title) {
   try {
     const query = `
-    SELECT books.title, authors.name AS author, genres.name AS genre, books.num_of_pages
+    SELECT books.id, books.title, authors.name AS author, genres.name AS genre, books.num_of_pages
     FROM books
     JOIN books_authors
     ON books.id = books_authors.book_id
@@ -79,12 +79,12 @@ async function insertFullBook({ title, author, genre, pages }) {
     const bookAuthorsQuery =
       'INSERT INTO books_authors (book_id, author_id) VALUES ($1, $2);';
     const bookAuthorsQueryArgs = [bookId, authorId];
-    await pool.query(bookAuthorsQuery, bookAuthorsQueryArgs);
+    await client.query(bookAuthorsQuery, bookAuthorsQueryArgs);
 
     const bookGenresQuery =
       'INSERT INTO books_genres (book_id, genre_id) VALUES ($1, $2);';
     const bookGenresQueryArgs = [bookId, genreId];
-    await pool.query(bookGenresQuery, bookGenresQueryArgs);
+    await client.query(bookGenresQuery, bookGenresQueryArgs);
 
     returnObj.success = true;
     returnObj.value = getFullBook(title);
@@ -92,6 +92,28 @@ async function insertFullBook({ title, author, genre, pages }) {
   } catch (error) {
     await client.query('ROLLBACK');
     console.error('Error creating full book:', error);
+  } finally {
+    client.release();
+  }
+}
+
+async function deleteFullBook(id) {
+  const client = await pool.connect();
+  try {
+    console.log(id);
+    const deleteBookQuery = 'DELETE FROM books WHERE id = $1';
+    const deleteBookAuthorQuery =
+      'DELETE FROM books_authors WHERE book_id = $1';
+    const deleteBookGenreQuery = 'DELETE FROM books_genres WHERE book_id = $1';
+
+    const queryArgs = [id];
+
+    await client.query(deleteBookAuthorQuery, queryArgs);
+    await client.query(deleteBookGenreQuery, queryArgs);
+    await client.query(deleteBookQuery, queryArgs);
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error('Error deleting full book:', error);
   } finally {
     client.release();
   }
@@ -200,6 +222,7 @@ module.exports = {
   getAllFullBooks,
   getFullBook,
   insertFullBook,
+  deleteFullBook,
   getAllBooks,
   getBook,
   insertBook,
