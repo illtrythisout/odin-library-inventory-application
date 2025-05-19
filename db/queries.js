@@ -41,7 +41,7 @@ exports.createFullBook = async function createFullBook({
       returnObj.error = `Book of title ${title} already exists`;
       return returnObj;
     } else {
-      bookId = insertBook(title, pages);
+      bookId = await insertBook(title, pages);
     }
 
     /*
@@ -61,7 +61,7 @@ exports.createFullBook = async function createFullBook({
 
     const bookGenresQuery =
       'INSERT INTO book_genres (book_id, genre_id) VALUES ($1, $2);';
-    const bookGenresQueryArgs = [bookId, authorId];
+    const bookGenresQueryArgs = [bookId, genreId];
     await pool.query(bookGenresQuery, bookGenresQueryArgs);
 
     returnObj.success = true;
