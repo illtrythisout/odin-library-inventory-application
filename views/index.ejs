@@ -10,10 +10,13 @@
 
     <a href="./createBook">Add a book</a>
 
-    <% if (locals.books) { %>
+    <% if (locals.books.length) { %>
     <ul>
       <% locals.books.forEach(book => { %>
-      <li><%= `Title: ${book.title}` %></li>
+      <li>
+        <%= `Title: ${book.title}, author: ${book.author}, no. of pages:
+        ${book.num_of_pages}, genre: ${book.genre}` %>
+      </li>
       <% }) %>
     </ul>
     <%} else { %>

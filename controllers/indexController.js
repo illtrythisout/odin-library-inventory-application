@@ -2,6 +2,7 @@ const db = require('../db/queries');
 
 exports.indexGet = async (req, res) => {
   const books = await db.getAllFullBooks();
+  console.log(books);
   res.render('index', { books });
 };
 
@@ -22,6 +23,5 @@ exports.createBookPost = async (req, res) => {
   const { title, author, pages, genre } = req.body;
   await db.insertFullBook({ title, author, pages, genre });
   const fullBookCreated = await db.getFullBook(title);
-  console.log(fullBookCreated);
   res.redirect('/');
 };
