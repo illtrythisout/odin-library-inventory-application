@@ -5,6 +5,9 @@ const indexController = require('../controllers/indexController');
 
 router.get('/', indexController.indexGet);
 
-router.route('/createBook').get(indexController.createBookGet);
+router
+  .route('/createBook')
+  .get(indexController.createBookGet)
+  .post(indexController.createBookPost);
 
 module.exports = router;

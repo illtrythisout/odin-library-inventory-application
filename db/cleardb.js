@@ -2,15 +2,15 @@ const { Client } = require('pg');
 require('dotenv').config();
 
 const SQL = `
+DELETE FROM books_authors;
+
+DELETE FROM books_genres;
+
 DELETE FROM books;
 
 DELETE FROM authors;
 
 DELETE FROM genres;
-
-DELETE FROM books_authors;
-
-DELETE FROM books_genres;
 `;
 
 async function main() {

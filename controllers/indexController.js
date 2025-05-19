@@ -1,13 +1,13 @@
 const db = require('../db/queries');
 
 exports.indexGet = async (req, res) => {
-  res.render('index');
+  const books = await db.getAllFullBooks();
+  res.render('index', { books });
 };
 
 exports.createBookGet = async (req, res) => {
   const authors = await db.getAllAuthors();
   const authorNames = authors.map((author) => author.name);
-  console.log(authorNames);
 
   const genres = await db.getAllGenres();
   const genreNames = genres.map((genre) => genre.name);
@@ -16,4 +16,12 @@ exports.createBookGet = async (req, res) => {
     authors: authorNames,
     genres: genreNames,
   });
+};
+
+exports.createBookPost = async (req, res) => {
+  const { title, author, pages, genre } = req.body;
+  await db.insertFullBook({ title, author, pages, genre });
+  const fullBookCreated = await db.getFullBook(title);
+  console.log(fullBookCreated);
+  res.redirect('/');
 };
